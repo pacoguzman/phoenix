@@ -455,7 +455,7 @@ defmodule Phoenix.ChannelTest do
       # The code above does not assert the payload matches the described map.
 
   """
-  defmacro assert_push(event, payload, timeout \\ 100) do
+  defmacro assert_push(event, payload, timeout \\ Application.fetch_env!(:ex_unit, :assert_receive_timeout)) do
     quote do
       assert_receive %Phoenix.Socket.Message{
                         event: unquote(event),
@@ -474,7 +474,7 @@ defmodule Phoenix.ChannelTest do
   timeout value, so use it only when necessary as overuse
   will certainly slow down your test suite.
   """
-  defmacro refute_push(event, payload, timeout \\ 100) do
+  defmacro refute_push(event, payload, timeout \\ Application.fetch_env!(:ex_unit, :refute_receive_timeout)) do
     quote do
       refute_receive %Phoenix.Socket.Message{
                         event: unquote(event),
@@ -496,7 +496,7 @@ defmodule Phoenix.ChannelTest do
 
   The timeout is in milliseconds and defaults to 100ms.
   """
-  defmacro assert_reply(ref, status, payload \\ Macro.escape(%{}), timeout \\ 100) do
+  defmacro assert_reply(ref, status, payload \\ Macro.escape(%{}), timeout \\ Application.fetch_env!(:ex_unit, :assert_receive_timeout)) do
     quote do
       ref = unquote(ref)
       assert_receive %Phoenix.Socket.Reply{
@@ -517,7 +517,7 @@ defmodule Phoenix.ChannelTest do
   timeout value, so use it only when necessary as overuse
   will certainly slow down your test suite.
   """
-  defmacro refute_reply(ref, status, payload \\ Macro.escape(%{}), timeout \\ 100) do
+  defmacro refute_reply(ref, status, payload \\ Macro.escape(%{}), timeout \\ Application.fetch_env!(:ex_unit, :refute_receive_timeout)) do
     quote do
       ref = unquote(ref)
       refute_receive %Phoenix.Socket.Reply{
